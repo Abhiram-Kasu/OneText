@@ -24,7 +24,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapBlazorHub();
+
 app.MapHub<MessagingHub>("/chat/realtime");
 
 app.Services.RegisterScheduledJobs();

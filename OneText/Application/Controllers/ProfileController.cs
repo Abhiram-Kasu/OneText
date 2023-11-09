@@ -95,10 +95,19 @@ public class ProfileController : Controller
     public async Task<IActionResult> GetFriends()
     {
         var user = await _authService.GetAuthenticatedUser(User);
-        var friendships = _db.Friendships.Where(x => x.User1Id == user.Id || x.User2Id == user.Id)
-            .Select(x => new { FriendId = x.User1Id == user.Id ? x.User2Id : x.User1Id, FriendshipId = x.Id }).ToList();
-        var friends = _db.Users.Where(x => friendships.Select(f => f.FriendId).Contains(x.Id))
-            .Select(x => new { FirstName = x.FirstName, LastName = x.LastName, Id = x.Id, FriendshipId = friendships.First(f => f.FriendId == x.Id).FriendshipId }).ToList();
+        
+        var friends = from friendship in _db.Friendships
+            join user1 in _db.Users on friendship.User1Id equals user1.Id
+            join user2 in _db.Users on friendship.User2Id equals user2.Id
+            where friendship.User1Id == user.Id || friendship.User2Id == user.Id
+            select new
+            {
+                FriendshipId = friendship.Id,
+                Id = friendship.User1Id == user.Id ? friendship.User2Id : friendship.User1Id,
+                FirstName = friendship.User1Id == user.Id ? user2.FirstName : user1.FirstName,
+                LastName = friendship.User1Id == user.Id ? user2.LastName : user1.LastName
+            };
+        
         return Ok(friends);
     }
 }
