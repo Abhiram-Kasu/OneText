@@ -1,4 +1,4 @@
-﻿namespace OneText.Client.Services;
+﻿namespace OneText.Client.Models;
 
 public class LoginModel
 {

@@ -26,6 +26,7 @@ public class AuthController : Controller
     [Route("login")]
     public async Task<IActionResult> Login(Login request)
     {
+        
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -44,7 +45,7 @@ public class AuthController : Controller
 
         var token = await _authService.CreateJwtToken(user);
 
-        return Ok(new { Name = user.FirstName, user.Email, token });
+        return Ok(new { user.FirstName, user.LastName, user.Email, token });
     }
 
     [HttpPost, AllowAnonymous]

@@ -1,8 +1,109 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="OneText.Client.Views.LoginView">
-    Welcome to Avalonia!
+﻿<UserControl
+    x:Class="OneText.Client.Views.LoginView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:OneText.Client.Models;assembly=OneText.Client"
+    xmlns:vm="clr-namespace:OneText.Client.ViewModels;assembly=OneText.Client"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:LoginViewModel"
+    mc:Ignorable="d">
+
+
+
+
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:LoginViewModel />
+    </Design.DataContext>
+
+    <Border
+        Padding="40"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="DarkSlateGray"
+        CornerRadius="20">
+
+        <StackPanel
+            MinWidth="200"
+            Margin="20,0,20,70"
+            Spacing="20">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="24">
+                Login
+            </Label>
+            <TextBox
+                MinWidth="150"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="{Binding Username, Mode=TwoWay}"
+                Watermark="Email" />
+            <TextBox
+                MinWidth="150"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                KeyDown="TextBox_KeyDown"
+                PasswordChar="*"
+                Text="{Binding Password, Mode=TwoWay}"
+                Watermark="Password" />
+            <Button
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding LoginCommand}"
+                Content="Login"
+                Styles="" />
+            <ProgressBar
+                IsEnabled="{Binding LoginCommand.IsRunning}"
+                IsIndeterminate="True"
+                IsVisible="{Binding LoginCommand.IsRunning}" />
+            <ListBox
+                Background="Transparent"
+                IsHitTestVisible="False"
+                ItemsSource="{Binding Errors}">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem:pointerover">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Focusable" Value="False" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.DataTemplates>
+                    <DataTemplate x:DataType="models:ValidationError">
+                        <Border
+                            Margin="5"
+                            Padding="10"
+                            Background="#cc5e5e"
+                            CornerRadius="20">
+                            <StackPanel>
+                                <ListBox
+                                    Background="Transparent"
+                                    Foreground="Black"
+                                    IsHitTestVisible="False"
+                                    ItemsSource="{Binding Errors}">
+                                    <ListBox.Styles>
+                                        <Style Selector="ListBoxItem:pointerover">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                        <Style Selector="ListBoxItem">
+                                            <Setter Property="Focusable" Value="False" />
+                                        </Style>
+                                    </ListBox.Styles>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+
+                </ListBox.DataTemplates>
+            </ListBox>
+        </StackPanel>
+    </Border>
+
 </UserControl>

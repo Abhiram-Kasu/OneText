@@ -1,4 +1,4 @@
-﻿namespace OneText.Client;
+﻿namespace OneText.Client.Models;
 
 public class RegisterModel
 {
