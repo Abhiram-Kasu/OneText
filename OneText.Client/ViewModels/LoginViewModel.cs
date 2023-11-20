@@ -39,6 +39,7 @@ public partial class LoginViewModel : ViewModelBase
         if(res)
         {
             //TODO Navigate
+            App.NavigationService.Navigate<HomeViewModel>(nameof(HomeView));
 
         }
         else

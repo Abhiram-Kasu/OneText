@@ -18,7 +18,7 @@ public partial class App : Application
     public static IServiceProvider Services { get; private set; } = default!;
     public static readonly INavigationService NavigationService = new NavigationService();
     private const string BackendUrl = "http://localhost:5217";
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -29,7 +29,7 @@ public partial class App : Application
         // Line below is needed to remove Avalonia data validation.
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
-        
+
 
         #region Services
 
@@ -37,19 +37,21 @@ public partial class App : Application
         {
             BaseAddress = new Uri(BackendUrl)
         });
-        ServiceCollection.AddSingleton((_) => new AuthService());
+        ServiceCollection.AddSingleton<AuthService>();
+        ServiceCollection.AddSingleton<ProfileService>();
 
         #endregion
 
         #region ViewModels
         NavigationService.AddViewAndViewModel<MainViewModel>(nameof(MainView), typeof(MainView));
         NavigationService.AddViewAndViewModel<LoginViewModel>(nameof(LoginView), typeof(LoginView));
+        NavigationService.AddViewAndViewModel<HomeViewModel>(nameof(HomeView), typeof(HomeView));
 
-        
+
 
         #endregion
-        
-        
+
+
 
         Services = ServiceCollection.BuildServiceProvider();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

@@ -22,7 +22,8 @@ public class AuthService
     private readonly IStorageProvider _storageProvider;
     private readonly NameValueCollection _appSettings;
     private AuthState? _authState;
-    public event Action<LoginState>? OnChange;
+    public AuthState AuthStateInformation => _authState;
+    public event Action<AuthService,LoginState>? OnChange;
 
 
     public AuthService()
@@ -42,11 +43,11 @@ public class AuthService
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _authState = await _httpClient.GetFromJsonAsync<AuthState>("/profile");
-            OnChange?.Invoke(LoginState.LoggedIn);
+            OnChange?.Invoke(this, LoginState.LoggedIn);
         }
         else
         {
-            OnChange?.Invoke(LoginState.LoggedOut);
+            OnChange?.Invoke(this, LoginState.LoggedOut);
         }
     } 
      
@@ -75,7 +76,7 @@ public class AuthService
             
             
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authState!.Token);
-            OnChange?.Invoke(LoginState.LoggedIn);
+            OnChange?.Invoke(this, LoginState.LoggedIn);
             return new AuthResult(true);
         }
 
@@ -87,7 +88,7 @@ public class AuthService
     public void Logout()
     {
         _appSettings["authToken"] = null;
-        OnChange?.Invoke(LoginState.LoggedOut);
+        OnChange?.Invoke(this, LoginState.LoggedOut);
     }
 
     public enum LoginState
@@ -112,7 +113,7 @@ public class AuthService
         [JsonPropertyName("email")]
         public string Email { get; set; } = default!;
         [JsonPropertyName("token")]
-        public string Token { get; set; } = default!;
+        public string Token { get; init; } = default!;
     }
 
 

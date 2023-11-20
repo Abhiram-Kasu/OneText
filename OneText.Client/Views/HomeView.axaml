@@ -1,0 +1,59 @@
+<UserControl
+    x:Class="OneText.Client.HomeView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:OneText.Client.Models;assembly=OneText.Client"
+    xmlns:vm="clr-namespace:OneText.Client.ViewModels;assembly=OneText.Client"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:HomeViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:HomeViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="Auto,*">
+
+        <Label
+            Margin="10"
+            Content="Welcome Abhiram!"
+            FontSize="30" />
+        <Border
+            Grid.Row="1"
+            Margin="10"
+            Padding="10"
+            Background="DarkSlateGray"
+            CornerRadius="10">
+
+
+            <Grid RowDefinitions="Auto, *">
+
+                <Label FontSize="20">Friends</Label>
+                <ListBox
+                    Grid.Row="1"
+                    Background="Transparent"
+                    ItemsSource="{Binding Friends}">
+                    <ListBox.DataTemplates>
+                        <DataTemplate x:DataType="models:Friend">
+                            <Label Content="{Binding FirstName}" />
+                        </DataTemplate>
+                    </ListBox.DataTemplates>
+                </ListBox>
+
+            </Grid>
+
+
+
+
+        </Border>
+        <ProgressBar
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsEnabled="{Binding InitialLoadCommand.IsRunning}"
+            IsIndeterminate="True"
+            IsVisible="{Binding InitialLoadCommand.IsRunning}" />
+
+    </Grid>
+</UserControl>
