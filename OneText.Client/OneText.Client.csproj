@@ -26,5 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\PricerApplicationAvalonia\SoapDispenser.Avalonia.Helpers\SoapDispenser.Avalonia.Helpers.csproj" />
+    <ProjectReference Include="..\OneText.Shared\OneText.Shared.csproj" />
   </ItemGroup>
 </Project>

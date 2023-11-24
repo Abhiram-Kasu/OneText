@@ -21,4 +21,6 @@ public class CompleteUser
     [JsonPropertyName("friends")]
     public List<Friend> Friends { get; set; }
 
+    public string FullName => $"{FirstName} {LastName}";
+
 }

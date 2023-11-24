@@ -17,7 +17,7 @@ public partial class App : Application
     private static readonly IServiceCollection ServiceCollection = new ServiceCollection();
     public static IServiceProvider Services { get; private set; } = default!;
     public static readonly INavigationService NavigationService = new NavigationService();
-    private const string BackendUrl = "http://localhost:5217";
+    private const string BackendUrl = "https://localhost:44323";
 
     public override void Initialize()
     {
@@ -46,6 +46,7 @@ public partial class App : Application
         NavigationService.AddViewAndViewModel<MainViewModel>(nameof(MainView), typeof(MainView));
         NavigationService.AddViewAndViewModel<LoginViewModel>(nameof(LoginView), typeof(LoginView));
         NavigationService.AddViewAndViewModel<HomeViewModel>(nameof(HomeView), typeof(HomeView));
+        NavigationService.AddViewAndViewModel<ChatViewModel>(nameof(ChatView), typeof(ChatView));
 
 
 

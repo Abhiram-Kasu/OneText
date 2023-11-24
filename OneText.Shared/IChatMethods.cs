@@ -2,13 +2,13 @@
 
 public interface IClientChatMethods
 {
-    ValueTask ReceiveMessage(string message);
-    ValueTask UpdateNumSubscribers(int numSubscribers);
+    Task ReceiveMessage(string message);
+    Task UpdateNumSubscribers(int numSubscribers);
 }
 
 public interface IServerChatMethods
 {
-    ValueTask SubscribeToUser(string groupId);
-    ValueTask UnsubscribeFromUser(string groupId);
-    ValueTask SendMessage(string groupId, string message);
+    Task SubscribeToUser(string groupId);
+    Task UnsubscribeFromUser(string groupId);
+    Task SendMessage(string groupId, string message);
 }

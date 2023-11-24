@@ -17,6 +17,7 @@ public partial class HomeViewModel : ViewModelBase
     private readonly ProfileService _profileService = App.Services.GetService(typeof(ProfileService)) as ProfileService?? throw new ArgumentNullException("Profile Service");
     public override string? Title => $"Welcome {_authService.AuthStateInformation.FirstName}!";
 
+    public CompleteUser CompleteUser => _profileService.User;
     public ObservableCollection<Friend> Friends { get; set; } = [];
 
     public HomeViewModel()
@@ -27,7 +28,14 @@ public partial class HomeViewModel : ViewModelBase
     public async Task InitialLoad()
     {
         await _profileService.LoadUser();
-        _profileService.User.Friends.ForEach(Friends.Add);
+        //_profileService.User.Friends.ForEach(Friends.Add);
+        Friends = [.. _profileService.User.Friends];
+        OnPropertyChanged(nameof(Friends));
+    }
+    [RelayCommand]
+    public void FriendTapped(int id)
+    {
+        App.NavigationService.Navigate<ChatViewModel>(nameof(ChatView), args: [id]);
     }
     
 }

@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:OneText.Client.Models;assembly=OneText.Client"
+    xmlns:viewModels="clr-namespace:OneText.Client.ViewModels;assembly=OneText.Client"
     xmlns:vm="clr-namespace:OneText.Client.ViewModels;assembly=OneText.Client"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -17,7 +18,7 @@
 
         <Label
             Margin="10"
-            Content="Welcome Abhiram!"
+            Content="{Binding Title}"
             FontSize="30" />
         <Border
             Grid.Row="1"
@@ -33,10 +34,43 @@
                 <ListBox
                     Grid.Row="1"
                     Background="Transparent"
+                    Focusable="False"
                     ItemsSource="{Binding Friends}">
+                    <ListBox.Styles>
+						<Style Selector="ListBoxItem:focus">
+							<Setter Property="Background" Value="Transparent" />
+						</Style>
+                        <Style Selector="ListBoxItem:pointerover">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Focusable" Value="False" />
+                        </Style>
+                    </ListBox.Styles>
                     <ListBox.DataTemplates>
                         <DataTemplate x:DataType="models:Friend">
-                            <Label Content="{Binding FirstName}" />
+
+
+                            <Border
+                                Margin="5"
+                                Padding="10"
+                                Background="Black"
+                                CornerRadius="10">
+                                <Grid ColumnDefinitions="*, Auto">
+
+                                    <Label VerticalAlignment="Center" Content="{Binding FullName}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="Green"
+                                        
+                                        Command="{Binding $parent[UserControl].((viewModels:HomeViewModel)DataContext).FriendTappedCommand}"
+                                        CommandParameter="{Binding FriendshipId}"
+                                        Content="Chat" />
+                                </Grid>
+                            </Border>
+
                         </DataTemplate>
                     </ListBox.DataTemplates>
                 </ListBox>

@@ -1,21 +1,18 @@
 ﻿using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using OneText.Application.Database;
 using OneText.Shared;
 
 namespace OneText.Application.Hubs;
-
-public class MessagingHub : Hub, IServerChatMethods
+[Authorize]
+public class MessagingHub(DatabaseContext db, ILogger<MessagingHub> _logger) : Hub, IServerChatMethods
 {
-    private readonly DatabaseContext db;
     private static readonly ConcurrentDictionary<string, int> NumUserMappings = new();
 
-    public MessagingHub(DatabaseContext db)
+    public async Task SubscribeToUser(string groupId)
     {
-        this.db = db;
-    }
-    public async ValueTask SubscribeToUser(string groupId)
-    {
+        _logger.LogInformation("Added user to group {0}", groupId);
         
         await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
         NumUserMappings.AddOrUpdate(groupId, 1, 
@@ -23,9 +20,9 @@ public class MessagingHub : Hub, IServerChatMethods
         
         await Clients.Group(groupId).SendAsync(nameof(IClientChatMethods.UpdateNumSubscribers), NumUserMappings[groupId]);
     }
-    public async ValueTask UnsubscribeFromUser(string groupId)
+    public async Task UnsubscribeFromUser(string groupId)
     {
-        
+        _logger.LogInformation("Removed user from group {0}", groupId);
         
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
         NumUserMappings[groupId]--;
@@ -34,10 +31,24 @@ public class MessagingHub : Hub, IServerChatMethods
             NumUserMappings.Remove(groupId, out _);
     }
 
-    public async ValueTask SendMessage(string groupId, string message)
+    public async Task SendMessage(string groupId, string message)
     {
+        _logger.LogInformation("Sending message to group {0}", groupId);
         await Clients.OthersInGroup(groupId).SendAsync(nameof(IClientChatMethods.ReceiveMessage), message);
         
     }
-    
+
+    public override async Task OnConnectedAsync()
+    {
+        await base.OnConnectedAsync();
+        _logger.LogInformation("User Connected");
+        
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        _logger.LogInformation("User Disconnected");
+        
+        return base.OnDisconnectedAsync(exception);
+    }
 }

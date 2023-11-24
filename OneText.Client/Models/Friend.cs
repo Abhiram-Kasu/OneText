@@ -12,4 +12,5 @@ public class Friend
     public required string LastName {get;set;}
     [JsonPropertyName("friendshipId")]
     public required int FriendshipId { get; set; }
+    public string FullName => $"{FirstName} {LastName}";
 }

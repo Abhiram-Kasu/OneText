@@ -1,0 +1,63 @@
+<UserControl
+    x:Class="OneText.Client.ChatView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:OneText.Client.ViewModels;assembly=OneText.Client"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="viewModels:ChatViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <viewModels:ChatViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="Auto, * , Auto">
+        <Grid ColumnDefinitions="*, Auto, Auto">
+
+            <Label
+                Margin="10"
+                Content="{Binding Title}"
+                FontSize="30" />
+            <Button
+                Grid.Column="1"
+                Background="{Binding Connection.ConnectionColor}"
+                Content="{Binding Connection.ConnectionString}" />
+            <Label
+                Grid.Column="2"
+                Margin="10"
+                VerticalAlignment="Center"
+                Content="{Binding NumSubscribers}" />
+
+        </Grid>
+        <Grid
+            Grid.Row="1"
+            VerticalAlignment="Bottom"
+            ColumnDefinitions="Auto, *">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding Title}" />
+            <TextBox
+                Grid.Column="1"
+                Margin="10"
+                IsReadOnly="True"
+                Text="{Binding FriendMessage}" />
+        </Grid>
+        <Grid Grid.Row="2" ColumnDefinitions="*, Auto">
+
+            <TextBox
+                Grid.Column="0"
+                Margin="10"
+                Text="{Binding LocalMessage}"
+                TextChanged="TextBox_TextChanged"
+                Watermark="Enter your message here: " />
+            <Button
+                Grid.Column="1"
+                Margin="0,0,10,0"
+                Background="Red"
+                Content="Clear" />
+        </Grid>
+    </Grid>
+
+</UserControl>
