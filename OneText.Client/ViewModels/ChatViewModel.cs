@@ -117,9 +117,14 @@ public partial class ChatViewModel : ViewModelBase, IClientChatMethods
     [RelayCommand]
     public async Task UpdateMessage()
     {
-        Console.WriteLine("Hello w");
-        
+
         await _hubConnection.InvokeAsync(nameof(IServerChatMethods.SendMessage), friendId.ToString(), LocalMessage);
+    }
+
+    [RelayCommand]
+    public void Clear()
+    {
+        LocalMessage = "";
     }
 
     public record struct ConnectionStatus(string ConnectionString, SolidColorBrush ConnectionColor);

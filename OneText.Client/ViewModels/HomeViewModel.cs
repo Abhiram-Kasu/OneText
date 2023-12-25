@@ -31,6 +31,8 @@ public partial class HomeViewModel : ViewModelBase
         //_profileService.User.Friends.ForEach(Friends.Add);
         Friends = [.. _profileService.User.Friends];
         OnPropertyChanged(nameof(Friends));
+        
+        
     }
     [RelayCommand]
     public void FriendTapped(int id)
