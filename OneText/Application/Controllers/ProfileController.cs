@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OneText.Application.Database;
+using OneText.Application.Models;
 using OneText.Application.Services.Auth;
 using OneText.Application.ViewModels;
 using Spark.Library.Extensions;
@@ -95,19 +97,34 @@ public class ProfileController : Controller
     public async Task<IActionResult> GetFriends()
     {
         var user = await _authService.GetAuthenticatedUser(User);
-        
+
         var friends = from friendship in _db.Friendships
-            join user1 in _db.Users on friendship.User1Id equals user1.Id
-            join user2 in _db.Users on friendship.User2Id equals user2.Id
-            where friendship.User1Id == user.Id || friendship.User2Id == user.Id
-            select new
-            {
-                FriendshipId = friendship.Id,
-                Id = friendship.User1Id == user.Id ? friendship.User2Id : friendship.User1Id,
-                FirstName = friendship.User1Id == user.Id ? user2.FirstName : user1.FirstName,
-                LastName = friendship.User1Id == user.Id ? user2.LastName : user1.LastName
-            };
-        
+                      join user1 in _db.Users on friendship.User1Id equals user1.Id
+                      join user2 in _db.Users on friendship.User2Id equals user2.Id
+                      where friendship.User1Id == user.Id || friendship.User2Id == user.Id
+                      select new
+                      {
+                          FriendshipId = friendship.Id,
+                          Id = friendship.User1Id == user.Id ? friendship.User2Id : friendship.User1Id,
+                          FirstName = friendship.User1Id == user.Id ? user2.FirstName : user1.FirstName,
+                          LastName = friendship.User1Id == user.Id ? user2.LastName : user1.LastName
+                      };
+
         return Ok(friends);
     }
+    [HttpGet, Authorize]
+    [Route("friends/search/{query}")]
+    public async IAsyncEnumerable<LimitedUser> PeopleSearch(string query)
+    {
+        query = query.ToLower();
+
+        var res = _db.Users.Where(u => u.FirstName.ToLower().Contains(query) || u.LastName.ToLower().Contains(query)).AsAsyncEnumerable();
+
+        await foreach (var user in res)
+        {
+            yield return (LimitedUser)user;
+        }
+    }
+
+
 }

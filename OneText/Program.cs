@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using OneText.Application.Database;
 using OneText.Application.Hubs;
 using OneText.Application.Startup;
 using Spark.Library.Config;
@@ -33,9 +31,6 @@ app.MapHub<MessagingHub>("/chat/realtime");
 app.Services.RegisterScheduledJobs();
 app.Services.RegisterEvents();
 
-app.MapGet("/search/{query}", async (string query, DatabaseContext db) =>
-{
-    return Results.Ok(await db.Users.Where(x => x.FirstName.Contains(query, StringComparison.InvariantCultureIgnoreCase) || x.FirstName.Contains(query, StringComparison.InvariantCultureIgnoreCase)).ToListAsync());
-}).RequireAuthorization();
+
 
 app.Run();
