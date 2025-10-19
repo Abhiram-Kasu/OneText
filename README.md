@@ -70,14 +70,14 @@ cp OneText/.env.example OneText/.env
 
 ```env
 # Application Settings
-APP_NAME=OneText
+APP_NAME=Spark                # Change to your app name (default is Spark)
 ENVIRONMENT=dev
 
 # Database Configuration
 DB_CONNECTION=sqlite           # Options: sqlite, mysql, postgres, sqlserver
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=OneText.db
+DB_DATABASE=Spark.db
 DB_USERNAME=root
 DB_PASSWORD=
 
@@ -92,7 +92,7 @@ MAIL_PORT=25
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="OneText"
+MAIL_FROM_NAME="George Constanza"
 ```
 
 ### Running the Application
@@ -169,7 +169,7 @@ dotnet build
 
 ## Security
 
-- Passwords are hashed using SHA256 before storage
+- Passwords are hashed using SHA256 before storage (Note: Consider upgrading to bcrypt, scrypt, or Argon2 for enhanced security)
 - JWT tokens are required for API and WebSocket authentication
 - Role-based authorization controls access to resources
 - CORS is configured for cross-origin requests
